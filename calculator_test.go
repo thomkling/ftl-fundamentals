@@ -150,6 +150,9 @@ func TestSqrt(t *testing.T) {
 		{"Square root of zero should be zero", 0, 0, false, 0},
 		{"Square root of a negative number should return an error", -4, 0, true, 0},
 		{"Square root of a positive whole number", 4, 0, false, 2},
+		{"Square root of NaN should return an error", math.NaN(), 0, true, 0},
+		{"Square root of negative infinity should return an error", math.Inf(-1), 0, true, 0},
+		{"Square root of positive infinity should be positive infinity", math.Inf(1), 0, false, math.Inf(1)},
 	}
 
 	t.Parallel()
@@ -172,8 +175,8 @@ func TestSqrt(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		a := random.Float64() * 100
 		name := fmt.Sprintf("Square root of %f", a)
-		result := math.Sqrt(a)
-		c := testCaseWithErr{name, a, 0, false, result}
+		want := math.Sqrt(a)
+		c := testCaseWithErr{name, a, 0, false, want}
 
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
