@@ -120,13 +120,12 @@ func testDivideFunc(c testCaseWithErr, f func(float64, float64) (float64, error)
 }
 
 func TestAddRandom(t *testing.T) {
-	s := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(s)
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	t.Parallel()
 	for i := 0; i < 100; i++ {
-		a := r.Float64() * 100
-		b := r.Float64() * 100
+		a := random.Float64() * 100
+		b := random.Float64() * 100
 		name := fmt.Sprintf("Adding %f and %f", a, b)
 		result := a + b
 		c := testCase{name, a, b, result}
@@ -148,11 +147,10 @@ func TestSqrt(t *testing.T) {
 		t.Run(c.name, testSqrtFunc(c, calculator.Sqrt))
 	}
 
-	s := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(s)
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	for i := 0; i < 100; i++ {
-		a := r.Float64() * 100
+		a := random.Float64() * 100
 		name := fmt.Sprintf("Square root of %f", a)
 		result := math.Sqrt(a)
 		c := testCaseWithErr{name, a, 0, false, result}
