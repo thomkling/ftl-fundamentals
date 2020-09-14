@@ -17,12 +17,12 @@ func Subtract(a, b float64) float64 {
 	return a - b
 }
 
-//Multiply takes two numbers and returns the result of multiplying them by each other.
+// Multiply takes two numbers and returns the result of multiplying them by each other.
 func Multiply(a, b float64) float64 {
 	return a * b
 }
 
-//Divide takes two numbers and returns the result of dividing the first by the second.
+// Divide takes two numbers and returns the result of dividing the first by the second.
 func Divide(a, b float64) (float64, error) {
 	if b == 0 {
 		return 0, fmt.Errorf("Dividing by zero is not valid: %f / %f", a, b)
@@ -31,7 +31,7 @@ func Divide(a, b float64) (float64, error) {
 	return a / b, nil
 }
 
-//Sqrt takes a number and returns the square root.
+// Sqrt takes a number and returns the square root.
 func Sqrt(a float64) (float64, error) {
 	result := math.Sqrt(a)
 	if math.IsNaN(result) {
