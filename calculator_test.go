@@ -26,13 +26,13 @@ type testCaseWithErr struct {
 
 func TestAdd(t *testing.T) {
 	cases := []testCase{
-		{"Add two positive numbers", 2, 2, 4},
-		{"Add two negative numbers", -2, -2, -4},
-		{"Add one negative and one positive number equaling zero", -1, 1, 0},
-		{"Add one fractional and one whole number", 5.4, 2, 7.4},
-		{"Add two fractional numbers", 2.3, 4.3, 6.6},
-		{"Add two fractional numbers equaling a whole number", 2.3, 3.7, 6},
-		{"Add two negative fractional numbers", -1.5, -2.5, -4},
+		{"two positive numbers", 2, 2, 4},
+		{"two negative numbers", -2, -2, -4},
+		{"one negative and one positive number equaling zero", -1, 1, 0},
+		{"one fractional and one whole number", 5.4, 2, 7.4},
+		{"two fractional numbers", 2.3, 4.3, 6.6},
+		{"two fractional numbers equaling a whole number", 2.3, 3.7, 6},
+		{"two negative fractional numbers", -1.5, -2.5, -4},
 	}
 
 	t.Parallel()
@@ -53,15 +53,15 @@ func testFunc(c testCase, f func(float64, float64) float64) func(*testing.T) {
 
 func TestSubtract(t *testing.T) {
 	cases := []testCase{
-		{"Subtract two positive numbers", 5, 1, 4},
-		{"Subtract two negative numbers", -5, -1, -4},
-		{"Subtract two negative numbers equaling zero", -1, -1, 0},
-		{"Subtract one fractional number from one whole number", 5.0, 1.5, 3.5},
-		{"Subtract two fractional numbers", 2.3, 4.3, -2},
-		{"Subtract two fractional numbers equaling a whole number", 2.5, 1.5, 1},
-		{"Subtract two negative fractional numbers", -2.5, -1.5, -1},
-		{"Subtract a negative number from a positive number", 5, -3, 8},
-		{"Subtract a postitive number from a negative number", -4, 2, -6},
+		{"two positive numbers", 5, 1, 4},
+		{"two negative numbers", -5, -1, -4},
+		{"two negative numbers equaling zero", -1, -1, 0},
+		{"a fractional number from a whole number", 5.0, 1.5, 3.5},
+		{"two fractional numbers", 2.3, 4.3, -2},
+		{"two fractional numbers equaling a whole number", 2.5, 1.5, 1},
+		{"two negative fractional numbers", -2.5, -1.5, -1},
+		{"a negative number from a positive number", 5, -3, 8},
+		{"a postitive number from a negative number", -4, 2, -6},
 	}
 
 	t.Parallel()
@@ -72,14 +72,14 @@ func TestSubtract(t *testing.T) {
 
 func TestMultiply(t *testing.T) {
 	cases := []testCase{
-		{"Multiply two positive numbers", 2, 2, 4},
-		{"Multiply two negative numbers", -2, -2, 4},
-		{"Multiply one postive number by zero", 1, 0, 0},
-		{"Multiply one fractional by one whole number", 5.4, 2, 10.8},
-		{"Multiply two fractional numbers", 2.6, 5.3, 13.78},
-		{"Multiply two fractional numbers equaling a whole number", 1.5, 4, 6},
-		{"Multiply two negative fractional numbers", -1.5, -2.5, 3.75},
-		{"Multiply one postive number by one negative number", -5, 3, -15},
+		{"two positive numbers", 2, 2, 4},
+		{"two negative numbers", -2, -2, 4},
+		{"a postive number by zero", 1, 0, 0},
+		{"a fractional by a whole number", 5.4, 2, 10.8},
+		{"two fractional numbers", 2.6, 5.3, 13.78},
+		{"two fractional numbers equaling a whole number", 1.5, 4, 6},
+		{"two negative fractional numbers", -1.5, -2.5, 3.75},
+		{"a postive number by a negative number", -5, 3, -15},
 	}
 
 	t.Parallel()
@@ -90,13 +90,13 @@ func TestMultiply(t *testing.T) {
 
 func TestDivide(t *testing.T) {
 	cases := []testCaseWithErr{
-		{"Divide two positive numbers", 4, 2, false, 2},
-		{"Divide two negative numbers", -4, -2, false, 2},
-		{"Divide one positive number by one negative number", 4, -2, false, -2},
-		{"Divide one negative number by one postive number", -4, 2, false, -2},
-		{"Divide two fractional positive numbers", 4.2, 2.1, false, 2},
-		{"Divide two fractional negative numbers equaling a whole number", -4.2, -2.1, false, 2},
-		{"Divide one positive number by zero", 4, 0, true, 0},
+		{"two positive numbers", 4, 2, false, 2},
+		{"two negative numbers", -4, -2, false, 2},
+		{"a positive number by a negative number", 4, -2, false, -2},
+		{"a negative number by a postive number", -4, 2, false, -2},
+		{"two fractional positive numbers", 4.2, 2.1, false, 2},
+		{"two fractional negative numbers equaling a whole number", -4.2, -2.1, false, 2},
+		{"a positive number by zero", 4, 0, true, 0},
 	}
 
 	t.Parallel()
