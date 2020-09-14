@@ -10,18 +10,18 @@ import (
 )
 
 type testCase struct {
-	name        string
-	firstInput  float64
-	secondInput float64
-	expected    float64
+	name string
+	a    float64
+	b    float64
+	want float64
 }
 
 type testCaseWithErr struct {
 	name        string
-	firstInput  float64
-	secondInput float64
+	a           float64
+	b           float64
 	errExpected bool
-	expected    float64
+	want        float64
 }
 
 func TestAdd(t *testing.T) {
@@ -43,8 +43,8 @@ func TestAdd(t *testing.T) {
 
 func testFunc(c testCase, f func(float64, float64) float64) func(*testing.T) {
 	return func(t *testing.T) {
-		want := c.expected
-		got := f(c.firstInput, c.secondInput)
+		want := c.want
+		got := f(c.a, c.b)
 		if want != got {
 			t.Errorf(c.name+": want %f, got %f", want, got)
 		}
@@ -107,8 +107,8 @@ func TestDivide(t *testing.T) {
 
 func testDivideFunc(c testCaseWithErr, f func(float64, float64) (float64, error)) func(*testing.T) {
 	return func(t *testing.T) {
-		want := c.expected
-		got, err := f(c.firstInput, c.secondInput)
+		want := c.want
+		got, err := f(c.a, c.b)
 		if err != nil && !c.errExpected {
 			t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
 		}
@@ -125,11 +125,11 @@ func TestAddRandom(t *testing.T) {
 
 	t.Parallel()
 	for i := 0; i < 100; i++ {
-		first := r.Float64() * 100
-		second := r.Float64() * 100
-		name := fmt.Sprintf("Adding %f and %f", first, second)
-		result := first + second
-		c := testCase{name, first, second, result}
+		a := r.Float64() * 100
+		b := r.Float64() * 100
+		name := fmt.Sprintf("Adding %f and %f", a, b)
+		result := a + b
+		c := testCase{name, a, b, result}
 
 		t.Run(c.name, testFunc(c, calculator.Add))
 	}
@@ -152,10 +152,10 @@ func TestSqrt(t *testing.T) {
 	r := rand.New(s)
 
 	for i := 0; i < 100; i++ {
-		value := r.Float64() * 100
-		name := fmt.Sprintf("Square root of %f", value)
-		result := math.Sqrt(value)
-		c := testCaseWithErr{name, value, 0, false, result}
+		a := r.Float64() * 100
+		name := fmt.Sprintf("Square root of %f", a)
+		result := math.Sqrt(a)
+		c := testCaseWithErr{name, a, 0, false, result}
 
 		t.Run(c.name, testSqrtFunc(c, calculator.Sqrt))
 	}
@@ -163,8 +163,8 @@ func TestSqrt(t *testing.T) {
 
 func testSqrtFunc(c testCaseWithErr, f func(float64) (float64, error)) func(*testing.T) {
 	return func(t *testing.T) {
-		want := c.expected
-		got, err := f(c.firstInput)
+		want := c.want
+		got, err := f(c.a)
 		if err != nil && !c.errExpected {
 			t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
 		}
