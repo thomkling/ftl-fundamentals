@@ -37,17 +37,13 @@ func TestAdd(t *testing.T) {
 
 	t.Parallel()
 	for _, c := range cases {
-		t.Run(c.name, testFunc(c, calculator.Add))
-	}
-}
-
-func testFunc(c testCase, f func(float64, float64) float64) func(*testing.T) {
-	return func(t *testing.T) {
-		want := c.want
-		got := f(c.a, c.b)
-		if want != got {
-			t.Errorf(c.name+": want %f, got %f", want, got)
-		}
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got := calculator.Add(c.a, c.b)
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 }
 
@@ -66,7 +62,13 @@ func TestSubtract(t *testing.T) {
 
 	t.Parallel()
 	for _, c := range cases {
-		t.Run(c.name, testFunc(c, calculator.Subtract))
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got := calculator.Subtract(c.a, c.b)
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 }
 
@@ -84,7 +86,13 @@ func TestMultiply(t *testing.T) {
 
 	t.Parallel()
 	for _, c := range cases {
-		t.Run(c.name, testFunc(c, calculator.Multiply))
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got := calculator.Multiply(c.a, c.b)
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 }
 
@@ -101,21 +109,17 @@ func TestDivide(t *testing.T) {
 
 	t.Parallel()
 	for _, c := range cases {
-		t.Run(c.name, testDivideFunc(c, calculator.Divide))
-	}
-}
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got, err := calculator.Divide(c.a, c.b)
+			if err != nil && !c.errExpected {
+				t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
+			}
 
-func testDivideFunc(c testCaseWithErr, f func(float64, float64) (float64, error)) func(*testing.T) {
-	return func(t *testing.T) {
-		want := c.want
-		got, err := f(c.a, c.b)
-		if err != nil && !c.errExpected {
-			t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
-		}
-
-		if want != got {
-			t.Errorf(c.name+": want %f, got %f", want, got)
-		}
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 }
 
@@ -130,7 +134,13 @@ func TestAddRandom(t *testing.T) {
 		result := a + b
 		c := testCase{name, a, b, result}
 
-		t.Run(c.name, testFunc(c, calculator.Add))
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got := calculator.Add(c.a, c.b)
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 
 }
@@ -144,7 +154,17 @@ func TestSqrt(t *testing.T) {
 
 	t.Parallel()
 	for _, c := range cases {
-		t.Run(c.name, testSqrtFunc(c, calculator.Sqrt))
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got, err := calculator.Sqrt(c.a)
+			if err != nil && !c.errExpected {
+				t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
+			}
+
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -155,20 +175,16 @@ func TestSqrt(t *testing.T) {
 		result := math.Sqrt(a)
 		c := testCaseWithErr{name, a, 0, false, result}
 
-		t.Run(c.name, testSqrtFunc(c, calculator.Sqrt))
-	}
-}
+		t.Run(c.name, func(t *testing.T) {
+			want := c.want
+			got, err := calculator.Sqrt(c.a)
+			if err != nil && !c.errExpected {
+				t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
+			}
 
-func testSqrtFunc(c testCaseWithErr, f func(float64) (float64, error)) func(*testing.T) {
-	return func(t *testing.T) {
-		want := c.want
-		got, err := f(c.a)
-		if err != nil && !c.errExpected {
-			t.Errorf(c.name+": wanted %f got an error: %v ", want, err)
-		}
-
-		if want != got {
-			t.Errorf(c.name+": want %f, got %f", want, got)
-		}
+			if want != got {
+				t.Errorf(c.name+": want %f, got %f", want, got)
+			}
+		})
 	}
 }
