@@ -9,23 +9,13 @@ import (
 	"time"
 )
 
-type testCase struct {
-	name string
-	a    float64
-	b    float64
-	want float64
-}
-
-type testCaseWithErr struct {
-	name        string
-	a           float64
-	b           float64
-	errExpected bool
-	want        float64
-}
-
 func TestAdd(t *testing.T) {
-	cases := []testCase{
+	cases := []struct {
+		name string
+		a    float64
+		b    float64
+		want float64
+	}{
 		{"two positive numbers", 2, 2, 4},
 		{"two negative numbers", -2, -2, -4},
 		{"one negative and one positive number equaling zero", -1, 1, 0},
@@ -35,7 +25,6 @@ func TestAdd(t *testing.T) {
 		{"two negative fractional numbers", -1.5, -2.5, -4},
 	}
 
-	t.Parallel()
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -48,7 +37,12 @@ func TestAdd(t *testing.T) {
 }
 
 func TestSubtract(t *testing.T) {
-	cases := []testCase{
+	cases := []struct {
+		name string
+		a    float64
+		b    float64
+		want float64
+	}{
 		{"two positive numbers", 5, 1, 4},
 		{"two negative numbers", -5, -1, -4},
 		{"two negative numbers equaling zero", -1, -1, 0},
@@ -60,7 +54,6 @@ func TestSubtract(t *testing.T) {
 		{"a postitive number from a negative number", -4, 2, -6},
 	}
 
-	t.Parallel()
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -73,7 +66,12 @@ func TestSubtract(t *testing.T) {
 }
 
 func TestMultiply(t *testing.T) {
-	cases := []testCase{
+	cases := []struct {
+		name string
+		a    float64
+		b    float64
+		want float64
+	}{
 		{"two positive numbers", 2, 2, 4},
 		{"two negative numbers", -2, -2, 4},
 		{"a postive number by zero", 1, 0, 0},
@@ -84,7 +82,6 @@ func TestMultiply(t *testing.T) {
 		{"a postive number by a negative number", -5, 3, -15},
 	}
 
-	t.Parallel()
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -97,17 +94,22 @@ func TestMultiply(t *testing.T) {
 }
 
 func TestDivide(t *testing.T) {
-	cases := []testCaseWithErr{
-		{"two positive numbers", 4, 2, false, 2},
-		{"two negative numbers", -4, -2, false, 2},
-		{"a positive number by a negative number", 4, -2, false, -2},
-		{"a negative number by a postive number", -4, 2, false, -2},
-		{"two fractional positive numbers", 4.2, 2.1, false, 2},
-		{"two fractional negative numbers equaling a whole number", -4.2, -2.1, false, 2},
-		{"a positive number by zero", 4, 0, true, 0},
+	cases := []struct {
+		name        string
+		a           float64
+		b           float64
+		want        float64
+		errExpected bool
+	}{
+		{"two positive numbers", 4, 2, 2, false},
+		{"two negative numbers", -4, -2, 2, false},
+		{"a positive number by a negative number", 4, -2, -2, false},
+		{"a negative number by a postive number", -4, 2, -2, false},
+		{"two fractional positive numbers", 4.2, 2.1, 2, false},
+		{"two fractional negative numbers equaling a whole number", -4.2, -2.1, 2, false},
+		{"a positive number by zero", 4, 0, 0, true},
 	}
 
-	t.Parallel()
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -126,13 +128,17 @@ func TestDivide(t *testing.T) {
 func TestAddRandom(t *testing.T) {
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	t.Parallel()
 	for i := 0; i < 100; i++ {
 		a := random.Float64() * 100
 		b := random.Float64() * 100
 		name := fmt.Sprintf("Adding %f and %f", a, b)
 		result := a + b
-		c := testCase{name, a, b, result}
+		c := struct {
+			name string
+			a    float64
+			b    float64
+			want float64
+		}{name, a, b, result}
 
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -146,16 +152,20 @@ func TestAddRandom(t *testing.T) {
 }
 
 func TestSqrt(t *testing.T) {
-	cases := []testCaseWithErr{
-		{"Square root of zero should be zero", 0, 0, false, 0},
-		{"Square root of a negative number should return an error", -4, 0, true, 0},
-		{"Square root of a positive whole number", 4, 0, false, 2},
-		{"Square root of NaN should return an error", math.NaN(), 0, true, 0},
-		{"Square root of negative infinity should return an error", math.Inf(-1), 0, true, 0},
-		{"Square root of positive infinity should be positive infinity", math.Inf(1), 0, false, math.Inf(1)},
+	cases := []struct {
+		name        string
+		a           float64
+		want        float64
+		errExpected bool
+	}{
+		{"Square root of zero should be zero", 0, 0, false},
+		{"Square root of a negative number should return an error", -4, 0, true},
+		{"Square root of a positive whole number", 4, 2, false},
+		{"Square root of NaN should return an error", math.NaN(), 0, true},
+		{"Square root of negative infinity should return an error", math.Inf(-1), 0, true},
+		{"Square root of positive infinity should be positive infinity", math.Inf(1), math.Inf(1), false},
 	}
 
-	t.Parallel()
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
@@ -176,7 +186,12 @@ func TestSqrt(t *testing.T) {
 		a := random.Float64() * 100
 		name := fmt.Sprintf("Square root of %f", a)
 		want := math.Sqrt(a)
-		c := testCaseWithErr{name, a, 0, false, want}
+		c := struct {
+			name        string
+			a           float64
+			want        float64
+			errExpected bool
+		}{name, a, want, false}
 
 		t.Run(c.name, func(t *testing.T) {
 			want := c.want
