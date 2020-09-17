@@ -27,10 +27,9 @@ func TestAdd(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got := calculator.Add(c.a, c.b)
-			if want != got {
-				t.Errorf("want %f, got %f", want, got)
+			if c.want != got {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
@@ -56,10 +55,9 @@ func TestSubtract(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got := calculator.Subtract(c.a, c.b)
-			if want != got {
-				t.Errorf("want %f, got %f", want, got)
+			if c.want != got {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
@@ -84,10 +82,9 @@ func TestMultiply(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got := calculator.Multiply(c.a, c.b)
-			if want != got {
-				t.Errorf("want %f, got %f", want, got)
+			if c.want != got {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
@@ -112,18 +109,17 @@ func TestDivide(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got, err := calculator.Divide(c.a, c.b)
 			errReceived := (err != nil)
 			if c.errExpected != errReceived {
 				if c.errExpected {
-					t.Fatalf(c.name+": wanted an error and instead got: %f", got)
+					t.Fatalf("wanted an error and instead got: %f", got)
 				}
-				t.Fatalf(c.name+": wanted %f got an error: %v ", want, err)
+				t.Fatalf("wanted %f got an error: %v ", c.want, err)
 			}
 
-			if !c.errExpected && want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+			if !c.errExpected && c.want != got {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
@@ -145,10 +141,9 @@ func TestAddRandom(t *testing.T) {
 		}{name, a, b, result}
 
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got := calculator.Add(c.a, c.b)
-			if want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+			if c.want != got {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
@@ -177,18 +172,17 @@ func TestSqrt(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			want := c.want
 			got, err := calculator.Sqrt(c.a)
 			errReceived := (err != nil)
 			if c.errExpected != errReceived {
 				if c.errExpected {
-					t.Fatalf(c.name+": wanted an error and instead got: %f", got)
+					t.Fatalf("wanted an error and instead got: %f", got)
 				}
-				t.Fatalf(c.name+": wanted %f got an error: %v ", want, err)
+				t.Fatalf("wanted %f got an error: %v ", c.want, err)
 			}
 
-			if !c.errExpected && !(compareFloat64(want, got, 0.000001)) {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+			if !c.errExpected && !(compareFloat64(c.want, got, 0.000001)) {
+				t.Errorf("want %f, got %f", c.want, got)
 			}
 		})
 	}
