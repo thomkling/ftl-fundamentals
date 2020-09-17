@@ -168,6 +168,11 @@ func TestSqrt(t *testing.T) {
 		{"Square root of NaN should return an error", math.NaN(), 0, true},
 		{"Square root of negative infinity should return an error", math.Inf(-1), 0, true},
 		{"Square root of positive infinity should be positive infinity", math.Inf(1), math.Inf(1), false},
+		{"Square root of 5.3", 5.3, 2.302173, false},
+		{"Square root of 12.2", 12.2, 3.492850, false},
+		{"Square root of 987.345", 987.345, 31.422046, false},
+		{"Square root of 123.098", 123.098, 11.094954, false},
+		{"Square root of 0.456", 0.456, 0.675278, false},
 	}
 
 	for _, c := range cases {
@@ -182,39 +187,18 @@ func TestSqrt(t *testing.T) {
 				t.Fatalf(c.name+": wanted %f got an error: %v ", want, err)
 			}
 
-			if !c.errExpected && want != got {
+			if !c.errExpected && !(compareFloat64(want, got, 0.000001)) {
 				t.Errorf(c.name+": want %f, got %f", want, got)
 			}
 		})
 	}
+}
 
-	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-
-	for i := 0; i < 100; i++ {
-		a := random.Float64() * 100
-		name := fmt.Sprintf("Square root of %f", a)
-		want := math.Sqrt(a)
-		c := struct {
-			name        string
-			a           float64
-			want        float64
-			errExpected bool
-		}{name, a, want, false}
-
-		t.Run(c.name, func(t *testing.T) {
-			want := c.want
-			got, err := calculator.Sqrt(c.a)
-			errReceived := (err != nil)
-			if c.errExpected != errReceived {
-				if c.errExpected {
-					t.Fatalf(c.name+": wanted an error and instead got: %f", got)
-				}
-				t.Fatalf(c.name+": wanted %f got an error: %v ", want, err)
-			}
-
-			if !c.errExpected && want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
-			}
-		})
+func compareFloat64(a, b, tolerance float64) bool {
+	if math.IsInf(a, 1) && math.IsInf(b, 1) {
+		return true
 	}
+
+	diff := math.Abs(a - b)
+	return diff < tolerance
 }
