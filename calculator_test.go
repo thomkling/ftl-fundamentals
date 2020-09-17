@@ -30,7 +30,7 @@ func TestAdd(t *testing.T) {
 			want := c.want
 			got := calculator.Add(c.a, c.b)
 			if want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+				t.Errorf("want %f, got %f", want, got)
 			}
 		})
 	}
@@ -59,7 +59,7 @@ func TestSubtract(t *testing.T) {
 			want := c.want
 			got := calculator.Subtract(c.a, c.b)
 			if want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+				t.Errorf("want %f, got %f", want, got)
 			}
 		})
 	}
@@ -87,7 +87,7 @@ func TestMultiply(t *testing.T) {
 			want := c.want
 			got := calculator.Multiply(c.a, c.b)
 			if want != got {
-				t.Errorf(c.name+": want %f, got %f", want, got)
+				t.Errorf("want %f, got %f", want, got)
 			}
 		})
 	}
