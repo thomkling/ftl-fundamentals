@@ -112,10 +112,7 @@ func TestDivide(t *testing.T) {
 			got, err := calculator.Divide(c.a, c.b)
 			errReceived := (err != nil)
 			if c.errExpected != errReceived {
-				if c.errExpected {
-					t.Fatalf("wanted an error and instead got: %f", got)
-				}
-				t.Fatalf("wanted %f got an error: %v ", c.want, err)
+				t.Fatalf("unexpected error status: %v", err)
 			}
 
 			if !c.errExpected && c.want != got {
@@ -132,18 +129,12 @@ func TestAddRandom(t *testing.T) {
 		a := random.Float64() * 100
 		b := random.Float64() * 100
 		name := fmt.Sprintf("Adding %f and %f", a, b)
-		result := a + b
-		c := struct {
-			name string
-			a    float64
-			b    float64
-			want float64
-		}{name, a, b, result}
+		want := a + b
 
-		t.Run(c.name, func(t *testing.T) {
-			got := calculator.Add(c.a, c.b)
-			if c.want != got {
-				t.Errorf("want %f, got %f", c.want, got)
+		t.Run(name, func(t *testing.T) {
+			got := calculator.Add(a, b)
+			if want != got {
+				t.Errorf("want %f, got %f", want, got)
 			}
 		})
 	}
@@ -175,10 +166,7 @@ func TestSqrt(t *testing.T) {
 			got, err := calculator.Sqrt(c.a)
 			errReceived := (err != nil)
 			if c.errExpected != errReceived {
-				if c.errExpected {
-					t.Fatalf("wanted an error and instead got: %f", got)
-				}
-				t.Fatalf("wanted %f got an error: %v ", c.want, err)
+				t.Fatalf("unexpected error status: %v", err)
 			}
 
 			if !c.errExpected && !(compareFloat64(c.want, got, 0.000001)) {
